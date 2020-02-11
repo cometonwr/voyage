@@ -39,6 +39,19 @@ public class CursorManager : MonoBehaviour
             }
         }
     }
+    void MakeStamp(GameObject stamp)
+    {
+        int column = (int)CursorTransform.localPosition.x / size;
+        int row = (int)CursorTransform.localPosition.y / size;
+        if (!hasStamp[column, row])
+        {
+            GameObject STAMP = GameObject.Instantiate(stamp, CursorTransform.parent); //Stamp의 타입이 먼지 모르겠음
+            STAMP.SetActive(true);
+            STAMP.GetComponent<RectTransform>().localPosition = CursorTransform.localPosition;
+            hasStamp[column, row] = true;
+        }
+
+    }
 
     void Update()
     {
@@ -63,16 +76,8 @@ public class CursorManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
-        { 
-            int column = (int)CursorTransform.localPosition.x / size;
-            int row = (int)CursorTransform.localPosition.y / size;
-            if (!hasStamp[column, row])
-            {
-                GameObject stamp = GameObject.Instantiate(Stamp, CursorTransform.parent);
-                stamp.SetActive(true);
-                stamp.GetComponent<RectTransform>().localPosition = CursorTransform.localPosition;
-                hasStamp[column, row] = true;
-            }
+        {
+            MakeStamp(Stamp);
         }
     }
 }
