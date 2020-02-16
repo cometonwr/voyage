@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 [Serializable]
 public class Recipe
 {
@@ -10,11 +12,21 @@ public class Recipe
     public int Column;
 
     public BlockType[] Blocks;
+
+
+}
+
+public class Test
+{
+    int localX = 10;
+    int localY = 20;
+
+    BlockType[,] blockTypes = new BlockType[localX, localY];
+
 }
 
 public enum BlockType
 {
-    Blank, 
-    Fire,
-    Water
+    None,
+    Filled
 }
