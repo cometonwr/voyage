@@ -17,10 +17,29 @@ public class CursorManager : MonoBehaviour
     const int horizontalLimit = 20;
     const int verticalLimit = 10;
 
-    bool[,] hasStamp = new bool[horizontalLimit , verticalLimit ];
+    string[,] hasStamp = new string[horizontalLimit, verticalLimit]; //bool에 리스트가 삽입된거임? 이걸 enum으로 어케 바꾸지? //헐 string 됨 //초기값을 Blank로 두고 싶은데
 
+    enum BlockIndex //그냥 참고용으로 만들어둔 enum. hasStamp를 enum으로 하면 헷갈릴 것 같아서..
+    {
+        Blank,
+        Filled
+    }
+    
     float timeGap = 0.2f;
     float elapsedTime = 0;
+
+    private void Start()
+    {
+        for (int i = 0; i < horizontalLimit; i++)
+        {
+            for (int j = 0; j < verticalLimit; j++)
+            {
+                hasStamp[i, j] = "Blank"; //이거 enum BlockIndex[0] 이라고 쓰면 왜 안되지?
+            }
+
+        }
+        RecipeCheck(0,0);
+    }
 
     void MoveCursor(KeyCode keycode, Vector3 offset)
     {
@@ -29,7 +48,7 @@ public class CursorManager : MonoBehaviour
             if (Input.GetKeyDown(keycode)) //키가 한 번 눌리면
             {
                 elapsedTime = 0;
-                CursorTransform.Translate(offset, Space.Self); //커서를 이동
+                CursorTransform.Translate(offset, Space.Self); //생각해보니까 이거 무슨뜻이지?
             }
             else
             {
@@ -46,12 +65,13 @@ public class CursorManager : MonoBehaviour
     {
         int column = (int)CursorTransform.localPosition.x / size;
         int row = (int)CursorTransform.localPosition.y / size;
-        if (!hasStamp[column, row])
+        if (hasStamp[column, row]=="Blank") 
         {
-            GameObject stamp = GameObject.Instantiate(Stamp, CursorTransform.parent); //Stamp의 타입이 먼지 모르겠음
+            GameObject stamp = GameObject.Instantiate(Stamp, CursorTransform.parent);
             stamp.SetActive(true);
             stamp.GetComponent<RectTransform>().localPosition = CursorTransform.localPosition;
-            hasStamp[column, row] = true;
+            hasStamp[column, row] = "Filled";
+            //그리고 여기서 레시피첵 호출해야할듯
         }
 
     }
@@ -82,5 +102,12 @@ public class CursorManager : MonoBehaviour
         {
             MakeStamp();
         }
+    }
+
+    void RecipeCheck(int column, int row)
+    {
+        string CurrentLocation = hasStamp[column, row];
+        //string CurrentRecipe = (string)tempRecipe.Blocks[(column + (row * 2) % 4)]; 이거 외않돼
+        //if (hasStamp[column, row] == tempRecipe.Blocks[(column + (row * 2) % 4)]);이것두 외않되
     }
 }
