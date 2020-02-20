@@ -23,6 +23,6 @@ public class Test
 
 public enum BlockType
 {
-    None,
+    Blank,
     Filled
 }
